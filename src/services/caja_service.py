@@ -9,10 +9,11 @@ def create_caja(db: Session, codigo, latitud, longitud):
     db.refresh(nueva_caja)
     return nueva_caja
 
-# Obtener todas las
-def get_cajas(db):
+# Obtener todas las cajas
+def get_cajas(db: Session):
     return db.query(Caja).all()
 
+# Obtener todas cajas por ID
 def get_caja_by_id(db, caja_id):
     return db.query(Caja).filter(Caja.cajaID == caja_id).first()
 

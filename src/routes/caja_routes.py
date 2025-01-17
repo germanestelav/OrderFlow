@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from sqlalchemy.orm import Session
 from database.db_mysql import get_db
-from services.caja_service import create_caja, get_cajas, get_caja_by_id, update_caja, delete_caja
+from services.caja_service import (create_caja, get_cajas, get_caja_by_id, update_caja, delete_caja)
 
 caja_bp = Blueprint("cajas", __name__)
 
