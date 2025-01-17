@@ -10,6 +10,9 @@ from routes.caja_routes import caja_bp
 from routes.departamento_routes import departamento_bp
 from routes.estado_cliente_routes import estado_cliente_bp
 from routes.plan_routes import plan_bp
+from routes.promocion_routes import promocion_bp
+from routes.rol_routes import rol_bp
+from routes.tipo_servicio_routes import tipo_servicio_bp
 
 app = Flask(__name__)
 
@@ -19,6 +22,9 @@ app.register_blueprint(caja_bp, url_prefix="/api")
 app.register_blueprint(departamento_bp, url_prefix="/api")
 app.register_blueprint(estado_cliente_bp, url_prefix="/api")
 app.register_blueprint(plan_bp, url_prefix="/api")
+app.register_blueprint(promocion_bp, url_prefix="/api")
+app.register_blueprint(rol_bp, url_prefix="/api")
+app.register_blueprint(tipo_servicio_bp, url_prefix="/api")
 
 @app.route("/")
 def root():
