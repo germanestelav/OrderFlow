@@ -4,9 +4,11 @@ import os
 # Agrega el directorio 'src' al PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
 
-from flask import Flask
+from flask_jwt_extended import JWTManager, create_access_token
+from services.auth_service import verificar_credenciales
+from database.db_mysql import get_db
 from flask_cors import CORS
-from flask import Flask
+from flask import Flask, jsonify, request
 from routes.area_routes import area_bp
 from routes.caja_routes import caja_bp
 from routes.departamento_routes import departamento_bp
@@ -28,6 +30,30 @@ app = Flask(__name__)
 
 # Configurar CORS para permitir solicitudes desde cualquier origen
 CORS(app)
+
+# # Configurar CORS para permitir solo solicitudes desde un dominio específico
+# CORS(app, resources={r"/api/*": {"origins": "http://tudominio.com"}})
+
+# Configurar clave secreta para JWT
+app.config["JWT_SECRET_KEY"] = "clave_secreta_super_segura"  # Cambia esto por una clave segura
+jwt = JWTManager(app)  # Inicialización correcta
+
+# Ruta de autenticación
+@app.route("/api/login", methods=["POST"])
+def login():
+    data = request.json
+    username = data.get("username")
+    password = data.get("password")
+    
+    # Verificar credenciales usando tu servicio
+    db = next(get_db())
+    usuario = verificar_credenciales(db, username, password)
+
+    if usuario:
+        access_token = create_access_token(identity={"username": username})
+        return jsonify({"access_token": access_token}), 200
+    else:
+        return jsonify({"error": "Credenciales inválidas"}), 401
 
 # Registrar las rutas de áreas
 app.register_blueprint(area_bp, url_prefix="/api")

@@ -26,15 +26,15 @@ class Usuario(Base):
     # Relación con departamentos
     departamento = relationship("Departamento", back_populates="usuarios")
 
+    # Relación con roles de usuario
     roles = relationship("UsuarioRol", back_populates="usuario", cascade="all, delete-orphan")
 
+    # Relación con ClienteUsuario
     clientesusuarios = relationship("ClienteUsuario", back_populates="usuario", cascade="all, delete-orphan")
 
-    # Relación con ClienteUsuario
-    clientes = relationship("ClienteUsuario", back_populates="usuario")
-
     # Relación con comentariosclientes
-    comentarios = relationship("ComentarioCliente", back_populates="usuario")
+    comentarios = relationship("ComentarioCliente", back_populates="usuario", cascade="all, delete-orphan")
+
 
     def to_dict(self):
         """

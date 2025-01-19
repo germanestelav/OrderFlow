@@ -9,9 +9,11 @@ class ClienteUsuario(Base):
     UsuarioID = Column(Integer, ForeignKey('usuarios.UsuarioID'), nullable=False)
     ClienteID = Column(Integer, ForeignKey('clientes.ClienteID'), nullable=False)
 
-    # Relaciones
-    usuario = relationship("Usuario", back_populates="clientes")
+    # Relación con Cliente
     cliente = relationship("Cliente", back_populates="usuarios")
+
+    # Relación con Usuario
+    usuario = relationship("Usuario", back_populates="clientesusuarios")
 
     def to_dict(self):
         """
