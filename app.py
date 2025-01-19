@@ -5,6 +5,8 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
 
 from flask import Flask
+from flask_cors import CORS
+from flask import Flask
 from routes.area_routes import area_bp
 from routes.caja_routes import caja_bp
 from routes.departamento_routes import departamento_bp
@@ -23,6 +25,9 @@ from routes.cliente_usuario_routes import cliente_usuario_bp
 from routes.comentariosclientes_routes import comentarios_clientes_bp
 
 app = Flask(__name__)
+
+# Configurar CORS para permitir solicitudes desde cualquier origen
+CORS(app)
 
 # Registrar las rutas de áreas
 app.register_blueprint(area_bp, url_prefix="/api")
