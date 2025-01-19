@@ -12,6 +12,12 @@ class Distrito(Base):
     # Relación con la tabla provincias
     provincia = relationship("Provincia", back_populates="distritos")
 
+    # Relación con Condominios
+    condominios = relationship("Condominio", back_populates="distrito")
+
+    # Relación inversa con clientes
+    clientes = relationship("Cliente", back_populates="distrito")
+
     def to_dict(self):
         """
         Convierte el modelo a un diccionario para facilitar su uso en JSON.

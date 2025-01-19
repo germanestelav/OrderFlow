@@ -17,7 +17,7 @@ def get_estados_cliente(db: Session):
 def get_estado_cliente_by_id(db: Session, estado_id):
     return db.query(EstadoCliente).filter(EstadoCliente.EstadoID == estado_id).first()
 
-# Eliminar un estado
+# Actualizar un estado
 def update_estado_cliente(db: Session, estado_id, nombre):
     estado = db.query(EstadoCliente).filter(EstadoCliente.EstadoID == estado_id).first()
     if estado:
@@ -26,6 +26,7 @@ def update_estado_cliente(db: Session, estado_id, nombre):
         db.refresh(estado)
     return estado
 
+# Eliminar un estado
 def delete_estado_cliente(db: Session, estado_id):
     estado = db.query(EstadoCliente).filter(EstadoCliente.EstadoID == estado_id).first()
     if estado:

@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Date, Enum
+from sqlalchemy.orm import relationship
 from database.db_mysql import Base
 import enum
 
@@ -15,6 +16,9 @@ class Promocion(Base):
     FechaFin = Column(Date, nullable=True)
     Estado = Column(Enum(EstadoEnum), default=EstadoEnum.Inactivo, nullable=False)
 
+    # Relación con clientes
+    clientes = relationship("Cliente", back_populates="promocion")
+    
     def to_dict(self):
         """
         Convierte el modelo a un diccionario para facilitar su uso en JSON.

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Numeric
 from database.db_mysql import Base
-
+from sqlalchemy.orm import relationship
 
 class Caja(Base):
     __tablename__ = 'cajas' # Nombre de la tabla en la base de datos
@@ -8,6 +8,10 @@ class Caja(Base):
     codigo = Column(String(50), unique=True, nullable=False)
     latitud = Column(Numeric(10, 8), nullable=False)  # Mayor precisión
     longitud = Column(Numeric(11, 8), nullable=False)  # Mayor precisión
+
+    # Relación con tabla clientes
+    clientes = relationship("Cliente", back_populates="caja")
+
 
     def to_dict(self):
         """

@@ -9,8 +9,14 @@ class Departamento(Base):
     Nombre = Column(String(100), nullable=False)
 
     # Relación con la tabla provincias
-    provincias = relationship("Provincia", back_populates="departamento")
+    provincias = relationship("Provincia", back_populates="departamento", cascade="all, delete-orphan")
 
+    # Relación con la tabla usuarios
+    usuarios = relationship("Usuario", back_populates="departamento", cascade="all, delete-orphan")
+
+    # Relación inversa con clientes
+    clientes = relationship("Cliente", back_populates="departamento")
+    
     def to_dict(self):
         """
         Convierte el modelo a un diccionario para facilitar su uso en JSON.

@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Date, Enum
 from database.db_mysql import Base
+from sqlalchemy.orm import relationship
 import enum
 
 # Define los posibles valores del ENUM
@@ -15,6 +16,9 @@ class Plan(Base):
     FechaInicio = Column(Date, nullable=True)  # Puede ser nulo
     FechaFin = Column(Date, nullable=True)  # Puede ser nulo
     Estado = Column(Enum(EstadoEnum), nullable=False, default=EstadoEnum.Inactivo)
+
+    # Relación con la tabla clientes
+    clientes = relationship("Cliente", back_populates="plan")
 
     def to_dict(self):
         """

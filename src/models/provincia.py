@@ -15,6 +15,9 @@ class Provincia(Base):
     # Relación con la tabla distritos
     distritos = relationship("Distrito", back_populates="provincia")
 
+    # Relación inversa con clientes
+    clientes = relationship("Cliente", back_populates="provincia")
+
     def to_dict(self):
         """
         Convierte el modelo a un diccionario para facilitar su uso en JSON.
