@@ -2,21 +2,66 @@ from flask import Blueprint, request, jsonify
 from database.db_mysql import get_db
 from sqlalchemy.orm import Session
 from models.cliente import Cliente
+from datetime import date, datetime
 from services.cliente_service import (
     get_clientes,
     get_cliente_by_id,
     create_cliente,
     update_cliente,
-    delete_cliente
+    delete_cliente, get_cliente_by_name_or_id
 )
 
 cliente_bp = Blueprint("clientes", __name__)
 
 @cliente_bp.route("/clientes", methods=["GET"])
 def get_clientes_endpoint():
-    db = next(get_db())
-    clientes = get_clientes(db)
-    return jsonify([cliente.to_dict() for cliente in clientes])
+    db: Session = next(get_db())
+
+    # Parámetros de paginación
+    page = int(request.args.get("page", 1))  # Página actual (por defecto 1)
+    per_page = int(request.args.get("per_page", 50))  # Clientes por página (por defecto 50)
+
+    # Parámetros de rango de fechas
+    fecha_inicio = request.args.get("fecha_inicio")  # Formato esperado: YYYY-MM-DD
+    fecha_fin = request.args.get("fecha_fin")  # Formato esperado: YYYY-MM-DD
+
+    # Si no se proporcionan fechas, usar por defecto el día actual
+    if not fecha_inicio and not fecha_fin:
+        hoy = date.today()
+        fecha_inicio = hoy
+        fecha_fin = hoy
+
+    # Convertir fechas a formato datetime
+    try:
+        fecha_inicio = datetime.strptime(str(fecha_inicio), "%Y-%m-%d").date()
+        fecha_fin = datetime.strptime(str(fecha_fin), "%Y-%m-%d").date()
+    except ValueError:
+        return jsonify({"error": "Formato de fecha inválido. Use YYYY-MM-DD."}), 400
+
+    # Consulta para obtener los clientes en el rango de fechas
+    clientes_query = db.query(Cliente).filter(
+        Cliente.Fecha >= fecha_inicio,
+        Cliente.Fecha <= fecha_fin
+    )
+
+    # Total de clientes
+    total = clientes_query.count()
+
+    # Aplicar paginación
+    clientes = clientes_query.offset((page - 1) * per_page).limit(per_page).all()
+
+    if not clientes:
+        return jsonify({"message": "No se encontraron clientes en el rango especificado"}), 404
+
+    # Retornar los resultados con información de paginación
+    return jsonify({
+        "total": total,
+        "page": page,
+        "per_page": per_page,
+        "fecha_inicio": str(fecha_inicio),
+        "fecha_fin": str(fecha_fin),
+        "results": [cliente.to_dict() for cliente in clientes]
+    }), 200
 
 @cliente_bp.route("/clientes/<int:cliente_id>", methods=["GET"])
 def get_cliente_by_id_endpoint(cliente_id):
@@ -25,6 +70,51 @@ def get_cliente_by_id_endpoint(cliente_id):
     if not cliente:
         return jsonify({"error": "Cliente no encontrado"}), 404
     return jsonify(cliente.to_dict())
+
+@cliente_bp.route("/clientes/buscar", methods=["GET"])
+def search_cliente_endpoint():
+    db: Session = next(get_db())
+
+    # Obtener parámetros de búsqueda y paginación
+    query = request.args.get("query", "").strip()
+    page = int(request.args.get("page", 1))  # Página actual
+    per_page = int(request.args.get("per_page", 50))  # Clientes por página
+
+    if not query:
+        return jsonify({"error": "Debe proporcionar un término de búsqueda"}), 400
+
+    # Realizar la consulta con paginación
+    clientes_query = db.query(Cliente).filter(
+        (Cliente.NombreCompleto.like(f"%{query}%")) | (Cliente.NumeroIdentificacion == query)
+    )
+
+    # Total de resultados
+    total = clientes_query.count()
+
+    # Aplicar paginación
+    clientes = clientes_query.offset((page - 1) * per_page).limit(per_page).all()
+
+    if not clientes:
+        return jsonify({"message": "No se encontraron clientes que coincidan con el criterio"}), 404
+
+    # Retornar los resultados con información de paginación
+    return jsonify({
+        "total": total,
+        "page": page,
+        "per_page": per_page,
+        "results": [cliente.to_dict() for cliente in clientes]
+    }), 200
+
+    db: Session = next(get_db())
+    query = request.args.get("query", "").strip()  # Obtén el parámetro 'query' desde la URL
+    if not query:
+        return jsonify({"error": "Debe proporcionar un término de búsqueda"}), 400
+
+    clientes = get_cliente_by_name_or_id(db, query)
+    if not clientes:
+        return jsonify({"message": "No se encontraron clientes que coincidan con el criterio"}), 404
+
+    return jsonify([cliente.to_dict() for cliente in clientes]), 200
 
 @cliente_bp.route("/clientes", methods=["POST"])
 def create_cliente_endpoint():
@@ -79,7 +169,6 @@ def create_cliente(db, data):
     db.commit()
     db.refresh(nuevo_cliente)
     return nuevo_cliente
-
 
 @cliente_bp.route("/clientes/<int:cliente_id>", methods=["PUT"])
 def update_cliente_endpoint(cliente_id):

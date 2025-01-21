@@ -76,6 +76,12 @@ def get_clientes(db):
 def get_cliente_by_id(db, cliente_id):
     return db.query(Cliente).filter(Cliente.ClienteID == cliente_id).first()
 
+# Busca al cliente por nombre o número de identificación (DNI)
+def get_cliente_by_name_or_id(db: Session, query: str):
+    return db.query(Cliente).filter(
+        (Cliente.NombreCompleto.like(f"%{query}%")) | (Cliente.NumeroIdentificacion == query)
+    ).all()
+
 # Actualizar un cliente
 def update_cliente(db, cliente_id, data):
     # Buscar el cliente existente
