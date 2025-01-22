@@ -3,69 +3,53 @@ from models.cliente import Cliente
 from datetime import datetime
 
 # Crear un nuevo cliente
-def create_cliente(
-    db, data,
-    NumeroIdentificacion,
-    TipoDocumento,
-    NombreCompleto,
-    Direccion,
-    DepartamentoID,
-    ProvinciaID,
-    DistritoID,
-    CoordenadasGPS,
-    Telefono,
-    Correo,
-    RecomendadoPor,
-    NombreRecomendado,
-    TipoServicioID,
-    PlanID,
-    PromoID,
-    Fecha,
-    AreaID,
-    CantidadTVBox,
-    CantidadRepetidor,
-    EstadoID,
-    Evaluacion,
-    UsuarioID,
-    cajaID,
-    CondominioID,
-    tipo_cliente
-):
+def create_cliente(db: Session, data: dict, usuario_id: int):
+    print("Paso 1: Iniciando creación de cliente en el servicio")  # Depuración
+    print(f"Datos recibidos: {data}")  # Depuración
+    print(f"UsuarioID asociado: {usuario_id}")  # Depuración
+
     # Validar el valor de 'tipo_cliente'
     tipo_cliente = data.get("tipo_cliente", "Nuevo")
+    print(f"Tipo de cliente: {tipo_cliente}")  # Depuración
+
     if tipo_cliente not in ["Nuevo", "Existente"]:
+        print(f"Error: Tipo de cliente no válido - {tipo_cliente}")  # Depuración
         raise ValueError(f"El valor '{tipo_cliente}' no es válido para 'tipo_cliente'. Solo se permiten 'Nuevo' o 'Existente'.")
 
+    # Crear el cliente con el UsuarioID asociado
     nuevo_cliente = Cliente(
-        NumeroIdentificacion=NumeroIdentificacion,
-        TipoDocumento=TipoDocumento,
-        NombreCompleto=NombreCompleto,
-        Direccion=Direccion,
-        DepartamentoID=DepartamentoID,
-        ProvinciaID=ProvinciaID,
-        DistritoID=DistritoID,
-        CoordenadasGPS=CoordenadasGPS,
-        Telefono=Telefono,
-        Correo=Correo,
-        RecomendadoPor=RecomendadoPor,
-        NombreRecomendado=NombreRecomendado,
-        TipoServicioID=TipoServicioID,
-        PlanID=PlanID,
-        PromoID=PromoID,
-        Fecha=Fecha,
-        AreaID=AreaID,
-        CantidadTVBox=CantidadTVBox,
-        CantidadRepetidor=CantidadRepetidor,
-        EstadoID=EstadoID,
-        Evaluacion=Evaluacion,
-        UsuarioID=UsuarioID,
-        cajaID=cajaID,
-        CondominioID=CondominioID,
+        NumeroIdentificacion=data.get("NumeroIdentificacion"),
+        TipoDocumento=data.get("TipoDocumento"),
+        NombreCompleto=data.get("NombreCompleto"),
+        Direccion=data.get("Direccion"),
+        DepartamentoID=data.get("DepartamentoID"),
+        ProvinciaID=data.get("ProvinciaID"),
+        DistritoID=data.get("DistritoID"),
+        CoordenadasGPS=data.get("CoordenadasGPS"),
+        Telefono=data.get("Telefono"),
+        Correo=data.get("Correo"),
+        RecomendadoPor=data.get("RecomendadoPor"),
+        NombreRecomendado=data.get("NombreRecomendado"),
+        TipoServicioID=data.get("TipoServicioID"),
+        PlanID=data.get("PlanID"),
+        PromoID=data.get("PromoID"),
+        Fecha=data.get("Fecha"),
+        AreaID=data.get("AreaID"),
+        CantidadTVBox=data.get("CantidadTVBox"),
+        CantidadRepetidor=data.get("CantidadRepetidor"),
+        EstadoID=data.get("EstadoID"),
+        Evaluacion=data.get("Evaluacion"),
+        UsuarioID=usuario_id,  # Asociar el UsuarioID
+        cajaID=data.get("cajaID"),
+        CondominioID=data.get("CondominioID"),
         tipo_cliente=tipo_cliente
     )
+
+    print(f"Cliente creado: {nuevo_cliente}")  # Depuración
     db.add(nuevo_cliente)
     db.commit()
     db.refresh(nuevo_cliente)
+    print("Paso 2: Cliente guardado en la base de datos")  # Depuración
     return nuevo_cliente
 
 # Obtener todos los clientes
