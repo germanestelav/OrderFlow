@@ -50,7 +50,7 @@ def login():
     usuario = verificar_credenciales(db, username, password)
 
     if usuario:
-        access_token = create_access_token(identity={"username": username})
+        access_token = create_access_token(identity={"username": username, "UsuarioID": usuario.UsuarioID})
         return jsonify({"access_token": access_token}), 200
     else:
         return jsonify({"error": "Credenciales inválidas"}), 401
