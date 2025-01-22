@@ -122,8 +122,9 @@ CREATE TABLE `clientes` (
   CONSTRAINT `fk_clientes_planes` FOREIGN KEY (`PlanID`) REFERENCES `planes` (`PlanID`),
   CONSTRAINT `fk_clientes_promociones` FOREIGN KEY (`PromoID`) REFERENCES `promociones` (`PromoID`),
   CONSTRAINT `fk_clientes_provincia` FOREIGN KEY (`ProvinciaID`) REFERENCES `provincias` (`ProvinciaID`),
-  CONSTRAINT `fk_clientes_tiposervicios` FOREIGN KEY (`TipoServicioID`) REFERENCES `tiposservicios` (`TipoServicioID`)
-) ENGINE=InnoDB AUTO_INCREMENT=272 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `fk_clientes_tiposervicios` FOREIGN KEY (`TipoServicioID`) REFERENCES `tiposservicios` (`TipoServicioID`),
+  CONSTRAINT `fk_clientes_usuarios` FOREIGN KEY (`UsuarioID`) REFERENCES `usuarios` (`UsuarioID`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=290 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +133,7 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` VALUES (259,'149964216','44835869','GIANCARLO FABIAN SOLANO TORRES','URB. EL PINAR PARCELA I   CALLE 16 B2-05',1,1,1,'-11.9203887,-77.0550473','916092161','giancarlosst@gmail.com','FB',NULL,5,1,1,'2024-12-13',2,0,0,3,'2024-12-14 00:09:48','2024-12-14 00:09:48','rojo',28,1,NULL,'Existente'),(260,'149964216','44835869','GIANCARLO FABIAN SOLANO TORRES','URB. EL PINAR PARCELA I   CALLE 16 B2-05',1,1,1,'-11.9203887,-77.0550473','916092161','giancarlosst@gmail.com','FB',NULL,7,1,1,'2024-12-13',2,0,0,3,'2024-12-14 00:18:38','2024-12-14 00:18:38','rojo',28,1,NULL,'Existente'),(261,'149964216','44835869','GIANCARLO FABIAN SOLANO TORRES','URB. EL PINAR PARCELA I   CALLE 16 B2-05',1,1,1,'-11.9203887,-77.0550473','916092161','giancarlosst@gmail.com','FB',NULL,7,1,1,'2024-12-13',2,0,0,3,'2024-12-14 00:30:41','2024-12-14 00:30:41','rojo',28,1,NULL,'Existente'),(262,'87654321','DNI','Cesar Juan Perez Gamboa','Av. Siempre Viva 742',2,1,2,'-12.046374,-77.042793','987654321','juan.perez@example.com','Pedro','Pedro Martínez',1,2,3,'2024-12-11',1,2,1,1,'2024-12-14 21:38:01','2024-12-14 21:38:01','Verde',74,1,3,'Existente'),(263,'41747245','DNI','ARTHUR JONNATHAN DELGADO BURGA','mi casita',1,1,4,'-11,-77','963852741','lima@correo.com','FB',NULL,4,8,3,'2024-12-14',1,0,0,3,'2024-12-14 21:39:51','2024-12-14 21:39:51','verde',16,46,NULL,'Nuevo'),(264,'149966501','49032232','CARRASCO CALDERON MILKA MELISA ','JR GUAYANA CON ASUNCIÓN #124 URB EL PARRAL ',1,1,1,'-11.953993, -77.054091','910463807','carrascomilka.93@Gmail.com','FB',NULL,4,1,1,'2024-12-14',2,0,0,3,'2024-12-14 22:00:20','2024-12-14 22:00:20','rojo',28,1,NULL,'Existente'),(265,'41747245','DNI','ARTHUR JONNATHAN DELGADO BURGA','los olivos',1,1,1,'-11,-77','963852741','correo@corre.com','FB',NULL,3,8,3,'2024-12-15',1,0,0,NULL,'2024-12-16 20:40:20','2024-12-16 22:11:50','verde',16,47,NULL,'Nuevo'),(266,'abcdsddd','09739247','preesa','CONDOMINIO LAS ACACIAS TORRE 3 PISO 13 DEP 1303',1,1,1,'-11,-77','930471406','renatowey@hotmail.com','FB',NULL,4,1,1,'2024-12-13',2,0,0,8,'2024-12-16 20:40:41','2025-01-19 02:14:10','rojo',21,1,NULL,'Existente'),(268,'149966527','09739247','SISLEY MONTERO RENATO JOSE','CONDOMINIO LAS ACACIAS TORRE 3 PISO 13 DEP 1303',1,1,1,'-11,-77','930471406','renatowey@hotmail.com','FB',NULL,4,1,1,'2024-12-13',2,0,0,8,NULL,NULL,'rojo',21,1,NULL,'Nuevo'),(269,'149966527','09739247','SISLEY MONTERO RENATO JOSE','CONDOMINIO LAS ACACIAS TORRE 3 PISO 13 DEP 1303',1,1,1,'-11,-77','930471406','renatowey@hotmail.com','FB',NULL,4,1,1,'2024-12-13',2,0,0,8,NULL,NULL,'rojo',21,1,NULL,'Nuevo'),(270,'149966527','09739247','SISLEY MONTERO RENATO JOSE','CONDOMINIO LAS ACACIAS TORRE 3 PISO 13 DEP 1303',1,1,1,'-11,-77','930471406','renatowey@hotmail.com','FB',NULL,4,1,1,'2024-12-13',2,0,0,8,NULL,NULL,'rojo',21,1,NULL,'Nuevo'),(271,'149966527','09739247','SISLEY MONTERO RENATO JOSE','CONDOMINIO LAS ACACIAS TORRE 3 PISO 13 DEP 1303',1,1,1,'-11,-77','930471406','renatowey@hotmail.com','FB',NULL,4,1,1,'2024-12-13',2,0,0,8,NULL,NULL,'rojo',21,1,NULL,'Nuevo');
+INSERT INTO `clientes` VALUES (259,'149964216','44835869','GIANCARLO FABIAN SOLANO TORRES','URB. EL PINAR PARCELA I   CALLE 16 B2-05',1,1,1,'-11.9203887,-77.0550473','916092161','giancarlosst@gmail.com','FB',NULL,5,1,1,'2024-12-13',2,0,0,3,'2024-12-14 00:09:48','2025-01-22 08:47:14','rojo',16,1,NULL,'Existente'),(260,'abcdsddd','09739247','preesa','CONDOMINIO LAS ACACIAS TORRE 3 PISO 13 DEP 1303',1,1,1,'-11,-77','930471406','renaty@hotmaillll.com','Faceboock',NULL,4,1,1,'2025-01-19',2,0,10,8,'2024-12-14 00:18:38','2025-01-22 14:46:44','amarillo',28,1,NULL,'Existente'),(261,'149964216','44835869','GIANCARLO FABIAN SOLANO TORRES','URB. EL PINAR PARCELA I   CALLE 16 B2-05',1,1,1,'-11.9203887,-77.0550473','916092161','giancarlosst@gmail.com','FB',NULL,7,1,1,'2024-12-13',2,0,0,3,'2024-12-14 00:30:41','2024-12-14 00:30:41','rojo',28,1,NULL,'Existente'),(262,'87654321','DNI','Cesar Juan Perez Gamboa','Av. Siempre Viva 742',2,1,2,'-12.046374,-77.042793','987654321','juan.perez@example.com','Pedro','Pedro Martínez',1,2,3,'2024-12-11',1,2,1,1,'2024-12-14 21:38:01','2024-12-14 21:38:01','Verde',74,1,3,'Existente'),(263,'41747245','DNI','ARTHUR JONNATHAN DELGADO BURGA','mi casita',1,1,4,'-11,-77','963852741','lima@correo.com','FB',NULL,4,8,3,'2024-12-14',1,0,0,3,'2024-12-14 21:39:51','2024-12-14 21:39:51','verde',16,46,NULL,'Nuevo'),(264,'149966501','49032232','CARRASCO CALDERON MILKA MELISA ','JR GUAYANA CON ASUNCIÓN #124 URB EL PARRAL ',1,1,1,'-11.953993, -77.054091','910463807','carrascomilka.93@Gmail.com','FB',NULL,4,1,1,'2024-12-14',2,0,0,3,'2024-12-14 22:00:20','2024-12-14 22:00:20','rojo',28,1,NULL,'Existente'),(265,'41747245','DNI','ARTHUR JONNATHAN DELGADO BURGA','los olivos',1,1,1,'-11,-77','963852741','correo@corre.com','FB',NULL,3,8,3,'2024-12-15',1,0,0,NULL,'2024-12-16 20:40:20','2024-12-16 22:11:50','verde',16,47,NULL,'Nuevo'),(286,'149966527','09739247','SISLEY MONTERO RENATO JOSE','CONDOMINIO LAS ACACIAS TORRE 3 PISO 13 DEP 1303',1,1,1,'-11,-77','930471406','renatowey@hotmail.com','FB',NULL,4,1,1,'2025-01-21',2,0,0,8,'2025-01-22 02:44:20','2025-01-22 09:09:37','rojo',15,1,NULL,'Nuevo'),(287,'149966527','987799247','SISLEY MONTERO RENATO JOSE','COND LAS ACACIAS TORRE 3 PISO 13 DEP 1303',1,1,1,'-11.77','993447486','renato@example.com','FB',NULL,4,1,1,'2025-01-21',2,0,0,1,'2025-01-22 07:09:01','2025-01-22 07:09:01','ocho',13,1,NULL,'Nuevo'),(289,'abcdsddd','09739247','preesa','CONDOMINIO LAS ACACIAS TORRE 3 PISO 13 DEP 1303',1,1,1,'-11,-77','930471406','renaty@hotmaillll.com','Faceboock',NULL,4,1,1,'2025-01-19',2,0,10,8,'2025-01-22 09:43:26','2025-01-22 14:47:12','amarillo',16,1,NULL,'Existente');
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +162,7 @@ CREATE TABLE `clientesusuarios` (
 
 LOCK TABLES `clientesusuarios` WRITE;
 /*!40000 ALTER TABLE `clientesusuarios` DISABLE KEYS */;
-INSERT INTO `clientesusuarios` VALUES (2,16,259),(5,15,260),(6,16,260);
+INSERT INTO `clientesusuarios` VALUES (2,16,259),(5,15,260),(6,16,287);
 /*!40000 ALTER TABLE `clientesusuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -192,7 +193,7 @@ CREATE TABLE `comentariosclientes` (
 
 LOCK TABLES `comentariosclientes` WRITE;
 /*!40000 ALTER TABLE `comentariosclientes` DISABLE KEYS */;
-INSERT INTO `comentariosclientes` VALUES (401,260,16,'Cliente requiere cambio de nuevo plancito rrr jajaja.','2025-01-19 04:35:59'),(402,260,16,'Cliente requiere cambio de nuevo plancito jajaja pancita bbbrrrr jajaja.','2025-01-19 05:18:31'),(407,260,16,'Prueba automática de fecha y hora','2025-01-19 04:56:58'),(408,260,16,'Prueba de fecha y hora','2025-01-19 05:02:52'),(409,260,16,'Prueba de fecha y hora','2025-01-19 05:04:42'),(410,260,16,'Prueba de fecha y hora qqqq','2025-01-19 05:17:59');
+INSERT INTO `comentariosclientes` VALUES (401,260,16,'Cliente requiere cambio de nuevo plancito rrr jajaja.','2025-01-19 04:35:59'),(402,260,16,'Cliente requiere cambio de nuevo plancito jajaja pancita bbbrrrr jajaja.','2025-01-19 05:18:31'),(407,260,16,'Prueba automática de fecha y hora','2025-01-19 04:56:58'),(408,260,16,'Prueba de fecha y hora','2025-01-19 05:02:52'),(409,260,16,'pereza y hambre tengo jajaja.','2025-01-22 10:42:08'),(410,260,15,'Prueba de fecha y hora qqqq','2025-01-19 05:17:59');
 /*!40000 ALTER TABLE `comentariosclientes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -261,7 +262,7 @@ CREATE TABLE `distritos` (
   PRIMARY KEY (`DistritoID`),
   KEY `ProvinciaID` (`ProvinciaID`),
   CONSTRAINT `fk_distritos_provincias` FOREIGN KEY (`ProvinciaID`) REFERENCES `provincias` (`ProvinciaID`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -394,7 +395,7 @@ CREATE TABLE `provincias` (
   PRIMARY KEY (`ProvinciaID`),
   KEY `DepartamentoID` (`DepartamentoID`),
   CONSTRAINT `fk_provincias_departamentos` FOREIGN KEY (`DepartamentoID`) REFERENCES `departamentos` (`DepartamentoID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -403,7 +404,7 @@ CREATE TABLE `provincias` (
 
 LOCK TABLES `provincias` WRITE;
 /*!40000 ALTER TABLE `provincias` DISABLE KEYS */;
-INSERT INTO `provincias` VALUES (1,'Lima',1),(2,'Cusco',2);
+INSERT INTO `provincias` VALUES (1,'Lima',1),(2,'Cusco',2),(10,'Provincia X',1);
 /*!40000 ALTER TABLE `provincias` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -531,4 +532,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-19  2:03:22
+-- Dump completed on 2025-01-22  5:47:30
