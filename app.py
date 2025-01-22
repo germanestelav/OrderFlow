@@ -25,6 +25,8 @@ from routes.usuario_rol_routes import usuario_rol_bp
 from routes.cliente_routes import cliente_bp
 from routes.cliente_usuario_routes import cliente_usuario_bp
 from routes.comentariosclientes_routes import comentarios_clientes_bp
+from routes.clientes_by_rol_routes import clientes_by_rol_bp
+from routes.clientes_by_usuario_routes import clientes_by_usuario_bp
 
 app = Flask(__name__)
 
@@ -72,6 +74,8 @@ app.register_blueprint(usuario_rol_bp, url_prefix="/api")
 app.register_blueprint(cliente_bp, url_prefix="/api")
 app.register_blueprint(cliente_usuario_bp, url_prefix="/api")
 app.register_blueprint(comentarios_clientes_bp, url_prefix="/api")
+app.register_blueprint(clientes_by_rol_bp, url_prefix="/api")
+app.register_blueprint(clientes_by_usuario_bp, url_prefix="/api")
 
 @app.route("/")
 def root():
