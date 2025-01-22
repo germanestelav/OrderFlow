@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
 from database.db_mysql import get_db
 from sqlalchemy.orm import Session
 from services.tipo_servicio_service import (
@@ -8,12 +9,14 @@ from services.tipo_servicio_service import (
 tipo_servicio_bp = Blueprint("tipos_servicio", __name__)
 
 @tipo_servicio_bp.route("/tipos-servicio", methods=["GET"])
+@jwt_required()
 def get_tipos_servicio_endpoint():
     db = next(get_db())
     tipos_servicio = get_tipos_servicio(db)
     return jsonify([tipo_servicio.to_dict() for tipo_servicio in tipos_servicio])
 
 @tipo_servicio_bp.route("/tipos-servicio/<int:tipo_servicio_id>", methods=["GET"])
+@jwt_required()
 def get_tipo_servicio_by_id_endpoint(tipo_servicio_id):
     db = next(get_db())
     tipo_servicio = get_tipo_servicio_by_id(db, tipo_servicio_id)
@@ -22,6 +25,7 @@ def get_tipo_servicio_by_id_endpoint(tipo_servicio_id):
     return jsonify(tipo_servicio.to_dict())
 
 @tipo_servicio_bp.route("/tipos-servicio", methods=["POST"])
+@jwt_required()
 def create_tipo_servicio_endpoint():
     db = next(get_db())
     data = request.json
@@ -29,6 +33,7 @@ def create_tipo_servicio_endpoint():
     return jsonify(nuevo_tipo_servicio.to_dict()), 201
 
 @tipo_servicio_bp.route("/tipos-servicio/<int:tipo_servicio_id>", methods=["PUT"])
+@jwt_required()
 def update_tipo_servicio_endpoint(tipo_servicio_id):
     db = next(get_db())
     data = request.json
@@ -38,6 +43,7 @@ def update_tipo_servicio_endpoint(tipo_servicio_id):
     return jsonify(tipo_servicio_actualizado.to_dict())
 
 @tipo_servicio_bp.route("/tipos-servicio/<int:tipo_servicio_id>", methods=["DELETE"])
+@jwt_required()
 def delete_tipo_servicio_endpoint(tipo_servicio_id):
     db = next(get_db())
     tipo_servicio_eliminado = delete_tipo_servicio(db, tipo_servicio_id)

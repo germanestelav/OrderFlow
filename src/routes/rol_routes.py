@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
 from database.db_mysql import get_db
 from sqlalchemy.orm import Session
 from services.rol_service import (
@@ -8,12 +9,14 @@ from services.rol_service import (
 rol_bp = Blueprint("roles", __name__)
 
 @rol_bp.route("/roles", methods=["GET"])
+@jwt_required()
 def get_roles_endpoint():
     db = next(get_db())
     roles = get_roles(db)
     return jsonify([rol.to_dict() for rol in roles])
 
 @rol_bp.route("/roles/<int:rol_id>", methods=["GET"])
+@jwt_required()
 def get_rol_by_id_endpoint(rol_id):
     db = next(get_db())
     rol = get_rol_by_id(db, rol_id)
@@ -22,6 +25,7 @@ def get_rol_by_id_endpoint(rol_id):
     return jsonify(rol.to_dict())
 
 @rol_bp.route("/roles", methods=["POST"])
+@jwt_required()
 def create_rol_endpoint():
     db: Session = next(get_db())
     data = request.json
@@ -29,6 +33,7 @@ def create_rol_endpoint():
     return jsonify({"RolID": nuevo_rol.RolID, "NombreRol": nuevo_rol.NombreRol}), 201
 
 @rol_bp.route("/roles/<int:rol_id>", methods=["PUT"])
+@jwt_required()
 def update_rol_endpoint(rol_id):
     db: Session = next(get_db())
     data = request.json
@@ -38,6 +43,7 @@ def update_rol_endpoint(rol_id):
     return jsonify({"RolID": rol_actualizado.RolID, "NombreRol": rol_actualizado.NombreRol})
 
 @rol_bp.route("/roles/<int:rol_id>", methods=["DELETE"])
+@jwt_required()
 def delete_rol_endpoint(rol_id):
     db: Session = next(get_db())
     rol_eliminado = delete_rol(db, rol_id)

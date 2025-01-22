@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 from database.db_mysql import get_db
 from services.departamento_service import (create_departamento, get_departamentos, get_departamento_by_id, update_departamento, delete_departamento)
@@ -7,6 +8,7 @@ from services.departamento_service import (create_departamento, get_departamento
 departamento_bp = Blueprint("departamentos", __name__)
 
 @departamento_bp.route("/departamentos", methods=["POST"])
+@jwt_required()
 def create_departamento_endpoint():
     db: Session = next(get_db())
     data = request.json
@@ -17,12 +19,14 @@ def create_departamento_endpoint():
     return jsonify(nuevo_departamento.to_dict()), 201
 
 @departamento_bp.route("/departamentos", methods=["GET"])
+@jwt_required()
 def get_departamentos_endpoint():
     db: Session = next(get_db())
     departamentos = get_departamentos(db)
     return jsonify([departamento.to_dict() for departamento in departamentos])
 
 @departamento_bp.route("/departamentos/<int:departamento_id>", methods=["GET"])
+@jwt_required()
 def get_departamento_by_id_endpoint(departamento_id):
     db: Session = next(get_db())
     departamento = get_departamento_by_id(db, departamento_id)
@@ -31,6 +35,7 @@ def get_departamento_by_id_endpoint(departamento_id):
     return jsonify(departamento.to_dict())
 
 @departamento_bp.route("/departamentos/<int:departamento_id>", methods=["PUT"])
+@jwt_required()
 def update_departamento_endpoint(departamento_id):
     db: Session = next(get_db())
     data = request.json
@@ -43,6 +48,7 @@ def update_departamento_endpoint(departamento_id):
     return jsonify(departamento.to_dict())
 
 @departamento_bp.route("/departamentos/<int:departamento_id>", methods=["DELETE"])
+@jwt_required()
 def delete_departamento_endpoint(departamento_id):
     db: Session = next(get_db())
     departamento = delete_departamento(db, departamento_id)

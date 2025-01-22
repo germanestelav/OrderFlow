@@ -15,6 +15,7 @@ from services.cliente_service import (
 cliente_bp = Blueprint("clientes", __name__)
 
 @cliente_bp.route("/clientes", methods=["GET"])
+@jwt_required()
 def get_clientes_endpoint():
     db: Session = next(get_db())
 
@@ -65,6 +66,7 @@ def get_clientes_endpoint():
     }), 200
 
 @cliente_bp.route("/clientes/<int:cliente_id>", methods=["GET"])
+@jwt_required()
 def get_cliente_by_id_endpoint(cliente_id):
     db = next(get_db())
     cliente = get_cliente_by_id(db, cliente_id)
@@ -73,6 +75,7 @@ def get_cliente_by_id_endpoint(cliente_id):
     return jsonify(cliente.to_dict())
 
 @cliente_bp.route("/clientes/buscar", methods=["GET"])
+@jwt_required()
 def search_cliente_endpoint():
     db: Session = next(get_db())
 
@@ -131,6 +134,7 @@ def create_cliente_endpoint():
         return jsonify({"error": "Ocurrió un error inesperado.", "details": str(e)}), 500
     
 @cliente_bp.route("/clientes/<int:cliente_id>", methods=["PUT"])
+@jwt_required()
 def update_cliente_endpoint(cliente_id):
     db: Session = next(get_db())
     data = request.json
@@ -146,6 +150,7 @@ def update_cliente_endpoint(cliente_id):
         return jsonify({"error": "Ocurrió un error inesperado.", "details": str(e)}), 500
 
 @cliente_bp.route("/clientes/<int:cliente_id>", methods=["DELETE"])
+@jwt_required()
 def delete_cliente_endpoint(cliente_id):
     db: Session = next(get_db())
     cliente_eliminado = delete_cliente(db, cliente_id)

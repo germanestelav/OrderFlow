@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
 from database.db_mysql import get_db
 from sqlalchemy.orm import Session
 from services.distrito_service import (
@@ -8,12 +9,14 @@ from services.distrito_service import (
 distrito_bp = Blueprint("distritos", __name__)
 
 @distrito_bp.route("/distritos", methods=["GET"])
+@jwt_required()
 def get_distritos_endpoint():
     db = next(get_db())
     distritos = get_distritos(db)
     return jsonify([distrito.to_dict() for distrito in distritos])
 
 @distrito_bp.route("/distritos/<int:distrito_id>", methods=["GET"])
+@jwt_required()
 def get_distrito_by_id_endpoint(distrito_id):
     db = next(get_db())
     distrito = get_distrito_by_id(db, distrito_id)
@@ -22,6 +25,7 @@ def get_distrito_by_id_endpoint(distrito_id):
     return jsonify(distrito.to_dict())
 
 @distrito_bp.route("/distritos", methods=["POST"])
+@jwt_required()
 def create_distrito_endpoint():
     db = next(get_db())
     data = request.json
@@ -33,6 +37,7 @@ def create_distrito_endpoint():
     return jsonify(nuevo_distrito.to_dict()), 201
 
 @distrito_bp.route("/distritos/<int:distrito_id>", methods=["PUT"])
+@jwt_required()
 def update_distrito_endpoint(distrito_id):
     db = next(get_db())
     data = request.json
@@ -47,6 +52,7 @@ def update_distrito_endpoint(distrito_id):
     return jsonify(distrito_actualizado.to_dict())
 
 @distrito_bp.route("/distritos/<int:distrito_id>", methods=["DELETE"])
+@jwt_required()
 def delete_distrito_endpoint(distrito_id):
     db = next(get_db())
     distrito_eliminado = delete_distrito(db, distrito_id)

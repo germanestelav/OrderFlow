@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 from database.db_mysql import get_db
 from services.caja_service import (create_caja, get_cajas, get_caja_by_id, update_caja, delete_caja)
@@ -6,6 +7,7 @@ from services.caja_service import (create_caja, get_cajas, get_caja_by_id, updat
 caja_bp = Blueprint("cajas", __name__)
 
 @caja_bp.route("/cajas", methods=["POST"])
+@jwt_required()
 def create_caja_endpoint():
     db: Session = next(get_db())
     data = request.json
@@ -18,12 +20,14 @@ def create_caja_endpoint():
     return jsonify(nueva_caja.to_dict()), 201
 
 @caja_bp.route("/cajas", methods=["GET"])
+@jwt_required()
 def get_cajas_endpoint():
     db: Session = next(get_db())
     cajas = get_cajas(db)
     return jsonify([caja.to_dict() for caja in cajas])
 
 @caja_bp.route("/cajas/<int:caja_id>", methods=["GET"])
+@jwt_required()
 def get_caja_by_id_endpoint(caja_id):
     db: Session = next(get_db())
     caja = get_caja_by_id(db, caja_id)
@@ -32,6 +36,7 @@ def get_caja_by_id_endpoint(caja_id):
     return jsonify(caja.to_dict())
 
 @caja_bp.route("/cajas/<int:caja_id>", methods=["PUT"])
+@jwt_required()
 def update_caja_endpoint(caja_id):
     db: Session = next(get_db())
     data = request.json
@@ -44,6 +49,7 @@ def update_caja_endpoint(caja_id):
     return jsonify(caja.to_dict())
 
 @caja_bp.route("/cajas/<int:caja_id>", methods=["DELETE"])
+@jwt_required()
 def delete_caja_endpoint(caja_id):
     db: Session = next(get_db())
     caja = delete_caja(db, caja_id)

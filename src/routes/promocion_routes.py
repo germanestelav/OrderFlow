@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
 from database.db_mysql import get_db
 from sqlalchemy.orm import Session
 from services.promocion_service import (get_promociones, get_promocion_by_id, create_promocion, update_promocion, delete_promocion)
@@ -6,12 +7,14 @@ from services.promocion_service import (get_promociones, get_promocion_by_id, cr
 promocion_bp = Blueprint("promociones", __name__)
 
 @promocion_bp.route("/promociones", methods=["GET"])
+@jwt_required()
 def get_promociones_endpoint():
     db = next(get_db())
     promociones = get_promociones(db)
     return jsonify([promocion.to_dict() for promocion in promociones])
 
 @promocion_bp.route("/promociones/<int:promocion_id>", methods=["GET"])
+@jwt_required()
 def get_promocion_by_id_endpoint(promocion_id):
     db = next(get_db())
     promocion = get_promocion_by_id(db, promocion_id)
@@ -20,6 +23,7 @@ def get_promocion_by_id_endpoint(promocion_id):
     return jsonify(promocion.to_dict())
 
 @promocion_bp.route("/promociones", methods=["POST"])
+@jwt_required()
 def create_promocion_endpoint():
     db: Session = next(get_db())
     data = request.json
@@ -40,6 +44,7 @@ def create_promocion_endpoint():
     }), 201
 
 @promocion_bp.route("/promociones/<int:promocion_id>", methods=["PUT"])
+@jwt_required()
 def update_promocion_endpoint(promocion_id):
     db: Session = next(get_db())
     data = request.json
@@ -63,6 +68,7 @@ def update_promocion_endpoint(promocion_id):
     })
 
 @promocion_bp.route("/promociones/<int:promocion_id>", methods=["DELETE"])
+@jwt_required()
 def delete_promocion_endpoint(promocion_id):
     db: Session = next(get_db())
     promocion_eliminada = delete_promocion(db, promocion_id)

@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
 from database.db_mysql import get_db
 from sqlalchemy.orm import Session
 from models.usuario import Usuario
@@ -14,6 +15,7 @@ from services.cliente_usuario_service import (
 cliente_usuario_bp = Blueprint("cliente_usuario", __name__)
 
 @cliente_usuario_bp.route("/clientesusuarios", methods=["POST"])
+@jwt_required()
 def create_cliente_usuario_endpoint():
     db: Session = next(get_db())
     data = request.json
@@ -41,6 +43,7 @@ def create_cliente_usuario_endpoint():
         return jsonify({"error": "Ocurrió un error inesperado", "details": str(e)}), 500
 
 @cliente_usuario_bp.route("/clientesusuarios", methods=["GET"])
+@jwt_required()
 def get_clientes_usuarios_endpoint():
     db: Session = next(get_db())
     try:
@@ -50,6 +53,7 @@ def get_clientes_usuarios_endpoint():
         return jsonify({"error": "Ocurrió un error inesperado", "details": str(e)}), 500
 
 @cliente_usuario_bp.route("/clientesusuarios/<int:id>", methods=["GET"])
+@jwt_required()
 def get_cliente_usuario_by_id_endpoint(id):
     db = next(get_db())
     cliente_usuario = get_cliente_usuario_by_id(db, id)
@@ -58,6 +62,7 @@ def get_cliente_usuario_by_id_endpoint(id):
     return jsonify(cliente_usuario.to_dict())
 
 @cliente_usuario_bp.route("/clientesusuarios/<int:cliente_usuario_id>", methods=["PUT"])
+@jwt_required()
 def update_cliente_usuario_endpoint(cliente_usuario_id):
     db: Session = next(get_db())
     data = request.json
@@ -71,8 +76,8 @@ def update_cliente_usuario_endpoint(cliente_usuario_id):
     except Exception as e:
         return jsonify({"error": "Ocurrió un error inesperado", "details": str(e)}), 500
 
-
 @cliente_usuario_bp.route("/clientesusuarios/<int:id>", methods=["DELETE"])
+@jwt_required()
 def delete_cliente_usuario_endpoint(id):
     db = next(get_db())
     cliente_usuario_eliminado = delete_cliente_usuario(db, id)

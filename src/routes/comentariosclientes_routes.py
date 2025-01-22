@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 from database.db_mysql import get_db
 from services.comentariosclientes_service import (
@@ -12,6 +13,7 @@ from services.comentariosclientes_service import (
 comentarios_clientes_bp = Blueprint("comentarios_clientes", __name__)
 
 @comentarios_clientes_bp.route("/comentariosclientes", methods=["POST"])
+@jwt_required()
 def create_comentario_cliente_endpoint():
     db: Session = next(get_db())
     data = request.json
@@ -24,12 +26,14 @@ def create_comentario_cliente_endpoint():
         return jsonify({"error": "Ocurrió un error inesperado.", "details": str(e)}), 500
 
 @comentarios_clientes_bp.route("/comentariosclientes", methods=["GET"])
+@jwt_required()
 def get_comentarios_clientes_endpoint():
     db: Session = next(get_db())
     comentarios = get_comentarios_clientes(db)
     return jsonify([comentario.to_dict() for comentario in comentarios])
 
 @comentarios_clientes_bp.route("/comentariosclientes/<int:comentario_id>", methods=["GET"])
+@jwt_required()
 def get_comentario_cliente_by_id_endpoint(comentario_id):
     db: Session = next(get_db())
     comentario = get_comentario_cliente_by_id(db, comentario_id)
@@ -38,6 +42,7 @@ def get_comentario_cliente_by_id_endpoint(comentario_id):
     return jsonify(comentario.to_dict())
 
 @comentarios_clientes_bp.route("/comentariosclientes/<int:comentario_id>", methods=["PUT"])
+@jwt_required()
 def update_comentario_cliente_endpoint(comentario_id):
     db: Session = next(get_db())
     data = request.json
@@ -50,6 +55,7 @@ def update_comentario_cliente_endpoint(comentario_id):
         return jsonify({"error": "Ocurrió un error inesperado.", "details": str(e)}), 500
 
 @comentarios_clientes_bp.route("/comentariosclientes/<int:comentario_id>", methods=["DELETE"])
+@jwt_required()
 def delete_comentario_cliente_endpoint(comentario_id):
     db: Session = next(get_db())
     try:

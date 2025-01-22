@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
 from database.db_mysql import get_db
 from sqlalchemy.orm import Session
 from services.provincia_service import (
@@ -8,12 +9,14 @@ from services.provincia_service import (
 provincia_bp = Blueprint("provincias", __name__)
 
 @provincia_bp.route("/provincias", methods=["GET"])
+@jwt_required()
 def get_provincias_endpoint():
     db = next(get_db())
     provincias = get_provincias(db)
     return jsonify([provincia.to_dict() for provincia in provincias])
 
 @provincia_bp.route("/provincias/<int:provincia_id>", methods=["GET"])
+@jwt_required()
 def get_provincia_by_id_endpoint(provincia_id):
     db = next(get_db())
     provincia = get_provincia_by_id(db, provincia_id)
@@ -22,6 +25,7 @@ def get_provincia_by_id_endpoint(provincia_id):
     return jsonify(provincia.to_dict())
 
 @provincia_bp.route("/provincias", methods=["POST"])
+@jwt_required()
 def create_provincia_endpoint():
     db = next(get_db())
     data = request.json
@@ -33,6 +37,7 @@ def create_provincia_endpoint():
     return jsonify(nueva_provincia.to_dict()), 201
 
 @provincia_bp.route("/provincias/<int:provincia_id>", methods=["PUT"])
+@jwt_required()
 def update_provincia_endpoint(provincia_id):
     db = next(get_db())
     data = request.json
@@ -47,6 +52,7 @@ def update_provincia_endpoint(provincia_id):
     return jsonify(provincia_actualizada.to_dict())
 
 @provincia_bp.route("/provincias/<int:provincia_id>", methods=["DELETE"])
+@jwt_required()
 def delete_provincia_endpoint(provincia_id):
     db = next(get_db())
     provincia_eliminada = delete_provincia(db, provincia_id)

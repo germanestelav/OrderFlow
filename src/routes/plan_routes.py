@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_jwt_extended import jwt_required
 from sqlalchemy.orm import Session
 from database.db_mysql import get_db
 from models.plan import EstadoEnum
@@ -7,6 +8,7 @@ from services.plan_service import (create_plan, get_planes, get_plan_by_id, upda
 plan_bp = Blueprint("planes", __name__)
 
 @plan_bp.route("/planes", methods=["POST"])
+@jwt_required()
 def create_plan_endpoint():
     db: Session = next(get_db())
     data = request.json
@@ -25,12 +27,14 @@ def create_plan_endpoint():
     return jsonify(nuevo_plan.to_dict()), 201
 
 @plan_bp.route("/planes", methods=["GET"])
+@jwt_required()
 def get_planes_endpoint():
     db: Session = next(get_db())
     planes = get_planes(db)
     return jsonify([plan.to_dict() for plan in planes])
 
 @plan_bp.route("/planes/<int:plan_id>", methods=["GET"])
+@jwt_required()
 def get_plan_by_id_endpoint(plan_id):
     db: Session = next(get_db())
     plan = get_plan_by_id(db, plan_id)
@@ -39,6 +43,7 @@ def get_plan_by_id_endpoint(plan_id):
     return jsonify(plan.to_dict())
 
 @plan_bp.route("/planes/<int:plan_id>", methods=["PUT"])
+@jwt_required()
 def update_plan_endpoint(plan_id):
     db: Session = next(get_db())
     data = request.json
@@ -59,6 +64,7 @@ def update_plan_endpoint(plan_id):
     return jsonify(plan.to_dict())
 
 @plan_bp.route("/planes/<int:plan_id>", methods=["DELETE"])
+@jwt_required()
 def delete_plan_endpoint(plan_id):
     db: Session = next(get_db())
     plan = delete_plan(db, plan_id)
